@@ -16,7 +16,7 @@ _Rien en cours._ **v0.0.0 livrée le 2026-09-23** : outillage de pilotage repris
 
 ## Ce qui revient à l'utilisateur (je ne peux pas le faire)
 
-- **Créer le dépôt GitHub `LeaGarage`** et donner le moyen d'y pousser (voir la fin de la session du 2026-09-23) — je ne réutilise pas le jeton du dépôt VIGIE.
+- ~~Créer le dépôt GitHub `LeaGarage`~~ — fait le 2026-09-23 (public), premier push `main` + tag `v0.0.0`. Le remote `origin` n'embarque **aucun jeton** : l'authentification passe par le gestionnaire d'identifiants de Git (`manager-core`).
 - **Activer GitHub Pages** (Settings → Pages → `main` / racine) une fois le premier push fait.
 - **Partager** le cahier du garagiste et la checklist depuis leur menu « Partager » (elles sont privées à la création), et envoyer le lien du cahier au garagiste référent.
 - **Désigner le garagiste référent** (qui répond au cahier).
