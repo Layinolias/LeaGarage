@@ -1,0 +1,7 @@
+node_modules/
+.claude/scheduled_tasks.lock
+.claude/settings.local.json
+*.log
+Thumbs.db
+desktop.ini
+~$*.xlsx

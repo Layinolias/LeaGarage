@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "shell": "bash",
+            "command": "echo '{\"hookSpecificOutput\":{\"hookEventName\":\"SessionStart\",\"additionalContext\":\"Nouvelle session dans le depot LEAGARAGE. Avant toute autre action, lis ces fichiers de suivi du projet : Documentation/POINT-DE-REPRISE.md (ou on en est), Documentation/ETAT-DU-PROJET.md (etat/suivi), Documentation/ROADMAP-MODULES-FUTURS.md (roadmap), Documentation/CHECKLIST-QA-V1.md (checklist QA). Puis relis les reponses et idees du Cahier du garagiste (ArtifactData, collections reponses et idees).\"}}'"
+          }
+        ]
+      }
+    ]
+  }
+}

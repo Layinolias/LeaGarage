@@ -1,0 +1,263 @@
+<title>Checklist QA LeaGarage</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@600;700&family=Public+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+  :root{
+    --bg:#F2F3F1; --bg-2:#E8EAE7; --surface:#FFFFFF; --inset:#F6F7F5;
+    --text:#1E2327; --muted:#5B646B; --faint:#8A939A;
+    --line:#DDE0DD; --line-strong:#C3C8C6;
+    --accent:#2D4F86; --accent-rgb:45,79,134; --accent-soft:#E9EEF7;
+    --voyant:#A86A12; --voyant-rgb:168,106,18; --voyant-soft:#FBF3E3;
+    --ok:#2F7D55; --ok-soft:#E7F4EC;
+    --shadow:0 1px 2px rgba(30,35,39,.05), 0 10px 24px -14px rgba(30,35,39,.14);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      color-scheme:dark;
+      --bg:#121518; --bg-2:#1A1E22; --surface:#1B2025; --inset:#161A1E;
+      --text:#E7EAEC; --muted:#A2ABB2; --faint:#6F7880;
+      --line:#2A3036; --line-strong:#3A424A;
+      --accent:#8FAEE6; --accent-rgb:143,174,230; --accent-soft:#1D2740;
+      --voyant:#E2A94E; --voyant-rgb:226,169,78; --voyant-soft:#2C2415;
+      --ok:#7CC49C; --ok-soft:#15261C;
+      --shadow:0 1px 2px rgba(0,0,0,.35), 0 12px 28px -16px rgba(0,0,0,.6);
+    }
+  }
+  :root[data-theme="dark"]{
+    color-scheme:dark;
+    --bg:#121518; --bg-2:#1A1E22; --surface:#1B2025; --inset:#161A1E;
+    --text:#E7EAEC; --muted:#A2ABB2; --faint:#6F7880;
+    --line:#2A3036; --line-strong:#3A424A;
+    --accent:#8FAEE6; --accent-rgb:143,174,230; --accent-soft:#1D2740;
+    --voyant:#E2A94E; --voyant-rgb:226,169,78; --voyant-soft:#2C2415;
+    --ok:#7CC49C; --ok-soft:#15261C;
+    --shadow:0 1px 2px rgba(0,0,0,.35), 0 12px 28px -16px rgba(0,0,0,.6);
+  }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:var(--bg); color:var(--text); font-family:"Public Sans",system-ui,-apple-system,"Segoe UI",sans-serif; font-size:15px; line-height:1.55; -webkit-font-smoothing:antialiased; }
+  h1,h2,h3{ font-family:"Saira Condensed","Arial Narrow",sans-serif; font-weight:600; margin:0; text-wrap:balance; }
+  code{ font-family:"JetBrains Mono",ui-monospace,Consolas,monospace; font-size:.86em; background:var(--bg-2); border:1px solid var(--line); border-radius:4px; padding:0 4px; }
+  a{ color:var(--accent); }
+  .wrap{ max-width:800px; margin:0 auto; padding-inline:20px; padding-block:40px 90px; }
+  @media (max-width:640px){ .wrap{ padding-inline:16px; padding-block:26px 64px; } }
+
+  .plaque{ display:inline-flex; align-items:stretch; border:1.5px solid var(--text); border-radius:5px; overflow:hidden; font-family:"JetBrains Mono",monospace; font-weight:600; font-size:12px; letter-spacing:.08em; background:var(--surface); }
+  .plaque .ue{ background:#1F3F95; color:#fff; font-size:9px; padding:3px 5px; display:flex; align-items:flex-end; }
+  .plaque .txt{ padding:3px 10px; }
+  header h1{ font-size:40px; line-height:1.02; margin:12px 0 0; letter-spacing:.005em; }
+  @media (max-width:640px){ header h1{ font-size:31px; } }
+  .lede{ color:var(--muted); max-width:64ch; margin:12px 0 0; }
+  .lede strong{ color:var(--text); font-weight:600; }
+  .url-chip{ display:inline-flex; gap:6px; margin-top:12px; font-size:12.5px; color:var(--muted); background:var(--surface); border:1px solid var(--line); border-radius:99px; padding:5px 12px; }
+  .url-chip code{ background:none; border:none; padding:0; color:var(--accent); }
+
+  .statusbar{ display:flex; align-items:center; gap:16px; flex-wrap:wrap; margin:26px 0 0; padding:14px 18px; background:var(--surface); border:1px solid var(--line); border-radius:10px; box-shadow:var(--shadow); }
+  .avancement{ display:flex; align-items:baseline; gap:8px; }
+  .avancement .n{ font-family:"Saira Condensed",sans-serif; font-weight:700; font-size:28px; line-height:1; font-variant-numeric:tabular-nums; }
+  .avancement .l{ font-size:12.5px; color:var(--muted); }
+  .jauge{ flex:1; min-width:120px; height:6px; border-radius:99px; background:var(--bg-2); overflow:hidden; }
+  .jauge i{ display:block; height:100%; width:0%; background:var(--ok); transition:width .35s ease; }
+  .sauvegarde{ font-size:12px; color:var(--faint); white-space:nowrap; }
+  .sauvegarde.on{ color:var(--ok); }
+  .alerte{ margin:16px 0 0; padding:12px 16px; border-radius:9px; background:var(--voyant-soft); border:1px solid var(--voyant); font-size:13.5px; }
+
+  .sommaire{ display:flex; gap:8px; flex-wrap:wrap; margin:16px 0 0; }
+  .sommaire a{ display:flex; align-items:center; gap:6px; font-size:12.5px; color:var(--muted); text-decoration:none; padding:6px 12px; border:1px solid var(--line); border-radius:99px; background:var(--surface); }
+  .sommaire a:hover{ border-color:var(--accent); color:var(--accent); }
+  .sommaire a b{ color:var(--faint); }
+  .sommaire a.done{ border-color:var(--ok); }
+
+  .chip{ font-family:"JetBrains Mono",monospace; font-size:11.5px; font-weight:600; color:var(--faint); background:var(--bg-2); border-radius:99px; padding:2px 9px; flex-shrink:0; }
+  .chip.done{ color:var(--ok); background:var(--ok-soft); }
+  .avenir{ font-size:10.5px; font-weight:600; letter-spacing:.05em; text-transform:uppercase; color:var(--faint); border:1px dashed var(--line-strong); border-radius:99px; padding:2px 8px; flex-shrink:0; }
+
+  .grp{ margin:26px 0 0; background:var(--surface); border:1px solid var(--line); border-radius:10px; box-shadow:var(--shadow); overflow:hidden; }
+  .grp > summary{ list-style:none; cursor:pointer; display:flex; align-items:center; gap:10px; padding:16px 20px; scroll-margin-top:16px; }
+  .grp > summary::-webkit-details-marker{ display:none; }
+  .grp > summary:focus-visible{ outline:2px solid var(--accent); outline-offset:-2px; }
+  .grp h2{ font-size:23px; flex:1 1 auto; }
+  .chev{ width:16px; height:16px; color:var(--faint); flex-shrink:0; transition:transform .18s ease; }
+  .grp[open] > summary .chev{ transform:rotate(90deg); }
+  .grp-body{ padding:0 20px 14px; }
+  @media (max-width:640px){ .grp > summary{ padding:14px 16px; } .grp-body{ padding:0 16px 12px; } }
+
+  .item-block{ border-top:1px solid var(--line); }
+  .item{ display:flex; align-items:flex-start; gap:10px; padding:11px 0; }
+  .item .chk{ margin:4px 0 0; width:17px; height:17px; accent-color:var(--ok); flex-shrink:0; cursor:pointer; }
+  .item-txt{ flex:1 1 auto; font-size:14px; cursor:pointer; }
+  .item-block.done .item-txt{ color:var(--muted); }
+  .note-btn{ flex-shrink:0; font:600 10px "Public Sans",sans-serif; letter-spacing:.05em; text-transform:uppercase; color:var(--faint); background:none; border:1px solid var(--line-strong); border-radius:99px; padding:4px 10px; cursor:pointer; }
+  .note-btn:hover{ border-color:var(--accent); color:var(--accent); }
+  .note-btn:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+  .note-btn.has-note{ color:var(--voyant); border-color:var(--voyant); background:var(--voyant-soft); }
+  .note-wrap{ padding:0 0 12px 27px; }
+  .note-ta{ width:100%; background:var(--surface); color:var(--text); border:1px solid var(--line); border-radius:8px; padding:8px 11px; font:400 13.5px "Public Sans",sans-serif; line-height:1.5; min-height:58px; resize:vertical; }
+  .note-ta:focus{ outline:none; border-color:var(--voyant); box-shadow:0 0 0 3px rgba(var(--voyant-rgb),.18); }
+  input:disabled, button:disabled, textarea:disabled{ opacity:.5; cursor:default; }
+
+  footer{ margin:44px 0 0; padding-top:20px; border-top:1px solid var(--line); color:var(--muted); font-size:13px; }
+  footer h2{ font-size:17px; color:var(--text); margin-bottom:6px; }
+  footer p{ margin:0 0 8px; max-width:62ch; }
+  footer ul{ margin:0 0 10px; padding-left:18px; }
+  @media (prefers-reduced-motion:reduce){ *{ transition:none !important; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <span class="plaque" aria-hidden="true"><span class="ue">F</span><span class="txt">LEA-GA-RAGE</span></span>
+    <h1>Checklist de test</h1>
+    <p class="lede" id="lede">Les points à dérouler <strong>à la main, dans un vrai navigateur</strong> — ce qu'un script ne peut pas juger. Coche au fur et à mesure ; si quelque chose coince, clique sur <b>note</b> à côté du point pour l'écrire là où ça s'est passé. Tout s'enregistre, y compris depuis le téléphone. Les sections marquées « à venir » portent sur des écrans pas encore construits.</p>
+    <div class="url-chip">Site à tester <code>layinolias.github.io/LeaGarage</code></div>
+
+    <div class="statusbar">
+      <div class="avancement"><span class="n" id="compte">0/0</span><span class="l">points cochés</span></div>
+      <div class="jauge"><i id="jauge"></i></div>
+      <span class="sauvegarde" id="etat">Chargement…</span>
+    </div>
+    <div class="alerte" id="alerte" hidden></div>
+    <nav class="sommaire" id="sommaire" aria-label="Sections"></nav>
+  </header>
+
+  <div id="sections"></div>
+
+  <footer>
+    <h2>Une note utile</h2>
+    <p>Le point coché dit déjà <b>où</b> ça se passe. Dans la note, précise plutôt :</p>
+    <ul>
+      <li><b>Qui</b> — le compte utilisé (gérant, ACC1, MEC1…)</li>
+      <li><b>Quoi</b> — ce qui était attendu, ce qui s'est passé</li>
+      <li><b>Navigateur</b> — s'il semble en cause</li>
+    </ul>
+    <p>Pas besoin d'une formulation parfaite : « le bouton Enregistrer ne fait rien » suffit.</p>
+  </footer>
+</div>
+
+<script>
+(function(){
+  /* Généré par outils/generer-items-checklist.js depuis Documentation/CHECKLIST-QA-V1.md — ne pas éditer à la main. */
+  var ITEMS = /*ITEMS*/[{"id":"s0-1","section":"0","sectionTitle":"Préparation","html":"Ouvrir le site dans un <strong>onglet de navigation privée</strong> au début de chaque section (évite de mélanger les données d'un test précédent)."},{"id":"s0-2","section":"0","sectionTitle":"Préparation","html":"Avoir sous la main les comptes de test : <code>gerant@garage-tilleuls.fr</code>/<code>gerant1234</code>, <code>ACC1</code>, <code>CA1</code>, <code>MEC1</code>, <code>MEC2</code>, <code>COMPTA1</code> (mot de passe <code>1234</code>)."},{"id":"s1-1","section":"1","sectionTitle":"Outillage de pilotage (v0.0.0)","html":"Le dépôt <code>https://github.com/Layinolias/LeaGarage</code> s'ouvre sans compte et affiche le README."},{"id":"s1-2","section":"1","sectionTitle":"Outillage de pilotage (v0.0.0)","html":"Depuis le poste de pilotage, chaque carte ouvre la bonne page (documents du dépôt, cahier, checklist)."},{"id":"s1-3","section":"1","sectionTitle":"Outillage de pilotage (v0.0.0)","html":"Dans le cahier du garagiste : choisir une option sur une question, écrire une remarque, recharger la page — la réponse est toujours là."},{"id":"s1-4","section":"1","sectionTitle":"Outillage de pilotage (v0.0.0)","html":"Dans le cahier : déposer une idée, la voir apparaître dans la liste, la retirer (confirmation dans la page)."},{"id":"s1-5","section":"1","sectionTitle":"Outillage de pilotage (v0.0.0)","html":"Dans cette checklist en ligne : cocher un point, écrire une note, recharger — coche et note sont conservées ; ouvrir la page sur un autre appareil — elles y sont aussi."},{"id":"s1-6","section":"1","sectionTitle":"Outillage de pilotage (v0.0.0)","html":"Ouvrir une nouvelle session Claude dans le dossier <code>E:\\LeaGarage</code> : elle commence par relire les fichiers de suivi (rappel de début de session)."},{"id":"s2-1","section":"2","sectionTitle":"Page d'accueil (v0.1.0 — à venir)","html":"L'URL racine affiche la vitrine sans passer par la connexion, avec le nom du garage lu dans les paramètres (pas écrit en dur)."},{"id":"s2-2","section":"2","sectionTitle":"Page d'accueil (v0.1.0 — à venir)","html":"L'avertissement « prototype » est visible (données fictives, stockées dans ce navigateur seulement)."},{"id":"s2-3","section":"2","sectionTitle":"Page d'accueil (v0.1.0 — à venir)","html":"Le bouton « Accéder à la démonstration » mène à l'écran de connexion."},{"id":"s2-4","section":"2","sectionTitle":"Page d'accueil (v0.1.0 — à venir)","html":"Le bouton « Réinitialiser les données de démonstration » demande confirmation, puis remet tout à zéro."},{"id":"s2-5","section":"2","sectionTitle":"Page d'accueil (v0.1.0 — à venir)","html":"Basculer le thème du système (clair/sombre) et recharger : les couleurs suivent."},{"id":"s3-1","section":"3","sectionTitle":"Connexion et paramètres (v0.1.0 — à venir)","html":"Connexion avec chacun des 6 comptes ; un mauvais mot de passe affiche un message clair."},{"id":"s3-2","section":"3","sectionTitle":"Connexion et paramètres (v0.1.0 — à venir)","html":"Après connexion, arrivée sur le cockpit, pas une page blanche."},{"id":"s3-3","section":"3","sectionTitle":"Connexion et paramètres (v0.1.0 — à venir)","html":"Le menu latéral ne montre que les modules autorisés au rôle."},{"id":"s3-4","section":"3","sectionTitle":"Connexion et paramètres (v0.1.0 — à venir)","html":"En gérant : modifier le nom du garage dans Paramètres — il change sur la vitrine, le cockpit et l'en-tête des documents."},{"id":"s3-5","section":"3","sectionTitle":"Connexion et paramètres (v0.1.0 — à venir)","html":"En mécanicien : taper directement l'adresse de Paramètres renvoie au cockpit."},{"id":"s4-1","section":"4","sectionTitle":"Responsive / mobile","html":"Largeur téléphone (~375 px) : pas de défilement horizontal, menu accessible, boutons utilisables au doigt."},{"id":"s4-2","section":"4","sectionTitle":"Responsive / mobile","html":"Largeur tablette d'atelier (~800 px, portrait et paysage) : les tableaux restent lisibles."},{"id":"s5-1","section":"5","sectionTitle":"Multi-navigateur","html":"Parcours §3 refait sur Chrome."},{"id":"s5-2","section":"5","sectionTitle":"Multi-navigateur","html":"Parcours §3 refait sur Firefox."},{"id":"s5-3","section":"5","sectionTitle":"Multi-navigateur","html":"Parcours §3 refait sur Safari (iPhone ou Mac)."},{"id":"s6-1","section":"6","sectionTitle":"Regard extérieur","html":"Démonstration faite à un garagiste extérieur au projet ; ses remarques sont notées dans le cahier."}]/*FIN-ITEMS*/;
+
+  var chev = '<svg class="chev" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  var sections = [], parNum = {};
+  ITEMS.forEach(function(it){
+    var s = parNum[it.section];
+    if (!s){ s = parNum[it.section] = { num:it.section, titre:it.sectionTitle, items:[] }; sections.push(s); }
+    s.items.push(it);
+  });
+
+  function titreSection(s){
+    var m = /^(.*?)\s*\((v[\d.]+)\s*—\s*à venir\)$/.exec(s.titre);
+    return m ? { t:m[1], avenir:m[2] } : { t:s.titre, avenir:null };
+  }
+
+  document.getElementById('sections').innerHTML = sections.map(function(s){
+    var ts = titreSection(s);
+    return '<details class="grp" id="sec-' + s.num + '" open>' +
+      '<summary><h2>' + s.num + '. ' + ts.t + '</h2>' + (ts.avenir ? '<span class="avenir">' + ts.avenir + ' · à venir</span>' : '') +
+      '<span class="chip" data-chip="' + s.num + '">0/' + s.items.length + '</span>' + chev + '</summary>' +
+      '<div class="grp-body">' + s.items.map(function(it){
+        return '<div class="item-block" data-item="' + it.id + '"><div class="item">' +
+          '<input type="checkbox" class="chk" id="chk-' + it.id + '" data-id="' + it.id + '" disabled>' +
+          '<label class="item-txt" for="chk-' + it.id + '">' + it.html + '</label>' +
+          '<button type="button" class="note-btn" data-id="' + it.id + '" disabled>note</button></div>' +
+          '<div class="note-wrap" data-note-for="' + it.id + '" hidden><textarea class="note-ta" id="note-' + it.id + '" data-id="' + it.id + '" disabled placeholder="Ce qui coince…" aria-label="Note"></textarea></div></div>';
+      }).join('') + '</div></details>';
+  }).join('');
+
+  document.getElementById('sommaire').innerHTML = sections.map(function(s){
+    return '<a href="#sec-' + s.num + '" data-nav="' + s.num + '"><b>' + s.num + '.</b> ' + titreSection(s).t + ' <span class="chip" data-chip="' + s.num + '">0/' + s.items.length + '</span></a>';
+  }).join('');
+
+  var state = {};
+  ITEMS.forEach(function(it){ state[it.id] = { checked:false, note:'' }; });
+
+  function repaint(){
+    var total = 0, faits = 0;
+    sections.forEach(function(s){
+      var f = s.items.filter(function(it){ return state[it.id].checked; }).length;
+      total += s.items.length; faits += f;
+      document.querySelectorAll('[data-chip="' + s.num + '"]').forEach(function(el){
+        el.textContent = f + '/' + s.items.length;
+        el.classList.toggle('done', f === s.items.length);
+      });
+      var nav = document.querySelector('[data-nav="' + s.num + '"]');
+      if (nav) nav.classList.toggle('done', f === s.items.length);
+    });
+    document.getElementById('compte').textContent = faits + '/' + total;
+    document.getElementById('jauge').style.width = (total ? Math.round(faits / total * 100) : 0) + '%';
+    ITEMS.forEach(function(it){
+      var b = document.querySelector('.item-block[data-item="' + it.id + '"]');
+      if (b) b.classList.toggle('done', state[it.id].checked);
+      var n = document.querySelector('.note-btn[data-id="' + it.id + '"]');
+      if (n) n.classList.toggle('has-note', !!state[it.id].note.trim());
+    });
+  }
+  repaint();
+
+  var db = null, timers = {};
+  var etat = document.getElementById('etat'), alerte = document.getElementById('alerte');
+  var zone = document.getElementById('sections');
+
+  function ecrire(id){
+    if (!db) return;
+    clearTimeout(timers[id]);
+    timers[id] = setTimeout(function(){
+      etat.textContent = 'Enregistrement…'; etat.className = 'sauvegarde';
+      db.collection('items').doc(id).set({ checked:state[id].checked, note:state[id].note, ts:new Date().toISOString() }).then(function(){
+        etat.textContent = 'Enregistré'; etat.className = 'sauvegarde on';
+      }).catch(function(e){
+        etat.textContent = 'Non enregistré'; etat.className = 'sauvegarde';
+        alerte.hidden = false;
+        alerte.textContent = "Ce point n'a pas pu être enregistré (" + (e && e.code ? e.code : 'erreur') + "). Continue : ce sera retenté au prochain changement.";
+      });
+    }, 450);
+  }
+
+  zone.addEventListener('change', function(e){
+    if (!e.target.classList.contains('chk')) return;
+    var id = e.target.getAttribute('data-id');
+    state[id].checked = e.target.checked; repaint(); ecrire(id);
+  });
+  zone.addEventListener('click', function(e){
+    var b = e.target.closest('.note-btn'); if (!b) return;
+    var w = document.querySelector('.note-wrap[data-note-for="' + b.getAttribute('data-id') + '"]');
+    w.hidden = !w.hidden; if (!w.hidden) w.querySelector('textarea').focus();
+  });
+  zone.addEventListener('input', function(e){
+    if (!e.target.classList.contains('note-ta')) return;
+    var id = e.target.getAttribute('data-id');
+    state[id].note = e.target.value; repaint(); ecrire(id);
+  });
+
+  window.claude.use('db').then(function(ns){
+    if (!ns){
+      etat.textContent = 'Lecture seule';
+      alerte.hidden = false;
+      alerte.textContent = "Rien ne peut être enregistré depuis cette vue : coches et notes seraient perdues. Ouvre la page connecté à ton compte Claude.";
+      return;
+    }
+    db = ns;
+    etat.textContent = 'Enregistrement automatique';
+    document.querySelectorAll('.chk, .note-btn, .note-ta').forEach(function(el){ el.disabled = false; });
+    db.collection('items').onSnapshot(function(snap){
+      snap.docs.forEach(function(doc){
+        var id = doc.id, d = doc.data() || {};
+        if (!state[id]) return;
+        state[id].checked = !!d.checked;
+        var ta = document.querySelector('.note-ta[data-id="' + id + '"]');
+        if (typeof d.note === 'string' && document.activeElement !== ta){
+          state[id].note = d.note;
+          if (ta.value !== d.note) ta.value = d.note;
+          if (d.note.trim()) ta.parentNode.hidden = false;
+        }
+        document.querySelector('.chk[data-id="' + id + '"]').checked = state[id].checked;
+      });
+      repaint();
+    }, function(e){
+      etat.textContent = 'Synchronisation interrompue';
+      alerte.hidden = false;
+      alerte.textContent = "La synchronisation s'est interrompue (" + (e && e.code ? e.code : 'erreur') + "). Recharge la page.";
+    });
+  });
+})();
+</script>

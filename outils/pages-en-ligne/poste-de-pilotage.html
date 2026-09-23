@@ -1,0 +1,168 @@
+<title>Pilotage LeaGarage</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@600;700&family=Public+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+  :root{
+    --bg:#F2F3F1; --bg-2:#E8EAE7; --surface:#FFFFFF; --inset:#F6F7F5;
+    --text:#1E2327; --muted:#5B646B; --faint:#8A939A;
+    --line:#DDE0DD; --line-strong:#C3C8C6;
+    --accent:#2D4F86; --accent-rgb:45,79,134; --accent-soft:#E9EEF7;
+    --voyant:#A86A12; --voyant-soft:#FBF3E3;
+    --ok:#2F7D55; --ok-soft:#E7F4EC;
+    --shadow:0 1px 2px rgba(30,35,39,.05), 0 10px 24px -14px rgba(30,35,39,.14);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      color-scheme:dark;
+      --bg:#121518; --bg-2:#1A1E22; --surface:#1B2025; --inset:#161A1E;
+      --text:#E7EAEC; --muted:#A2ABB2; --faint:#6F7880;
+      --line:#2A3036; --line-strong:#3A424A;
+      --accent:#8FAEE6; --accent-rgb:143,174,230; --accent-soft:#1D2740;
+      --voyant:#E2A94E; --voyant-soft:#2C2415;
+      --ok:#7CC49C; --ok-soft:#15261C;
+      --shadow:0 1px 2px rgba(0,0,0,.35), 0 12px 28px -16px rgba(0,0,0,.6);
+    }
+  }
+  :root[data-theme="dark"]{
+    color-scheme:dark;
+    --bg:#121518; --bg-2:#1A1E22; --surface:#1B2025; --inset:#161A1E;
+    --text:#E7EAEC; --muted:#A2ABB2; --faint:#6F7880;
+    --line:#2A3036; --line-strong:#3A424A;
+    --accent:#8FAEE6; --accent-rgb:143,174,230; --accent-soft:#1D2740;
+    --voyant:#E2A94E; --voyant-soft:#2C2415;
+    --ok:#7CC49C; --ok-soft:#15261C;
+    --shadow:0 1px 2px rgba(0,0,0,.35), 0 12px 28px -16px rgba(0,0,0,.6);
+  }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:var(--bg); color:var(--text); font-family:"Public Sans",system-ui,-apple-system,"Segoe UI",sans-serif; font-size:15px; line-height:1.55; -webkit-font-smoothing:antialiased; }
+  h1,h2,h3{ font-family:"Saira Condensed","Arial Narrow",sans-serif; font-weight:600; margin:0; text-wrap:balance; }
+  a{ color:inherit; text-decoration:none; }
+  .wrap{ max-width:900px; margin:0 auto; padding-inline:24px; padding-block:40px 80px; }
+  @media (max-width:640px){ .wrap{ padding-inline:16px; padding-block:26px 56px; } }
+
+  .plaque{ display:inline-flex; align-items:stretch; border:1.5px solid var(--text); border-radius:5px; overflow:hidden; font-family:"JetBrains Mono",monospace; font-weight:600; font-size:12px; letter-spacing:.08em; background:var(--surface); }
+  .plaque .ue{ background:#1F3F95; color:#fff; font-size:9px; padding:3px 5px; display:flex; align-items:flex-end; }
+  .plaque .txt{ padding:3px 10px; }
+  header h1{ font-size:44px; line-height:1; margin:12px 0 0; }
+  @media (max-width:640px){ header h1{ font-size:33px; } }
+  header p{ color:var(--muted); max-width:62ch; margin:12px 0 0; }
+
+  /* compteurs façon combiné d'instruments */
+  .etat{ display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--line); border:1px solid var(--line); border-radius:10px; overflow:hidden; margin:26px 0 0; }
+  @media (max-width:620px){ .etat{ grid-template-columns:repeat(2,1fr); } }
+  .etat div{ background:var(--surface); padding:15px 17px; }
+  .etat .v{ font-family:"Saira Condensed",sans-serif; font-weight:700; font-size:32px; line-height:1; display:flex; align-items:baseline; gap:4px; font-variant-numeric:tabular-nums; }
+  .etat .v small{ font-size:16px; font-weight:600; color:var(--faint); }
+  .etat .v.attention{ color:var(--voyant); }
+  .etat .k{ font-size:12px; color:var(--muted); margin-top:6px; }
+  .maj{ font-size:13px; color:var(--muted); margin:12px 0 0; max-width:70ch; }
+  .maj b{ color:var(--text); }
+
+  h2.grp{ font-size:14px; font-weight:600; letter-spacing:.14em; text-transform:uppercase; color:var(--faint); margin:40px 0 0; }
+  .liste{ display:flex; flex-direction:column; gap:10px; margin:14px 0 0; }
+  .carte{ display:block; background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:15px 19px; box-shadow:var(--shadow); transition:border-color .15s ease, transform .15s ease; }
+  .carte:hover{ border-color:var(--accent); transform:translateY(-1px); }
+  .carte:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+  .carte-t{ display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; }
+  .carte h3{ font-size:22px; }
+  .carte p{ color:var(--muted); font-size:13.5px; margin:5px 0 0; max-width:66ch; }
+  .chiffre{ margin-left:auto; font-family:"JetBrains Mono",monospace; font-size:12px; color:var(--faint); white-space:nowrap; font-variant-numeric:tabular-nums; }
+  .src{ font-size:10.5px; font-weight:600; letter-spacing:.05em; text-transform:uppercase; color:var(--faint); border:1px solid var(--line-strong); border-radius:99px; padding:1px 8px; }
+  .carte.vive{ background:linear-gradient(180deg, var(--accent-soft), var(--surface) 60%); }
+  .carte.vive .src{ color:var(--accent); border-color:rgba(var(--accent-rgb),.5); }
+  .carte.attente .chiffre{ color:var(--voyant); }
+  .carte.bientot{ box-shadow:none; background:var(--inset); border-style:dashed; }
+  .carte.bientot:hover{ transform:none; }
+
+  footer{ margin:46px 0 0; padding-top:20px; border-top:1px solid var(--line); color:var(--muted); font-size:13px; }
+  footer p{ margin:0 0 8px; max-width:64ch; }
+  @media (prefers-reduced-motion:reduce){ *{ transition:none !important; } .carte:hover{ transform:none; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <span class="plaque" aria-hidden="true"><span class="ue">F</span><span class="txt">LEA-GA-RAGE</span></span>
+    <h1>Poste de pilotage</h1>
+    <p>Tous les documents de suivi du projet LeaGarage — gestion d'atelier pour garage indépendant — réunis ici. Les documents qui se lisent vivent dans le dépôt ; ceux où l'on écrit (le cahier du garagiste, la checklist de recette) sont en ligne.</p>
+
+    <div class="etat">
+      <div><div class="v">0<small>/17</small></div><div class="k">modules construits</div></div>
+      <div><div class="v attention">11<small>/11</small></div><div class="k">questions au garagiste en attente</div></div>
+      <div><div class="v">24</div><div class="k">points de test à dérouler</div></div>
+      <div><div class="v">0</div><div class="k">écrans dans l'application</div></div>
+    </div>
+    <p class="maj">État au 23 septembre 2026 — version <b>v0.0.0</b>. L'outillage repris de VIGIE HSE est en place : mémo projet, rappel de lecture en début de session, serveur local, documentation de suivi et trois composants partagés déjà testés (échappement du texte, dates à l'heure locale, montants en centimes). <b>Aucun écran n'est construit</b> : la prochaine étape est la v0.1.0 (vitrine, connexion, paramètres du garage). Onze questions attendent le garagiste — y répondre maintenant évite de coder une règle de travers.</p>
+  </header>
+
+  <h2 class="grp">Décider · échanger</h2>
+  <div class="liste">
+    <a class="carte vive attente" href="https://claude.ai/artifact/4ditqAiLJkz7pkmo4cM9yh">
+      <div class="carte-t"><h3>Cahier du garagiste</h3><span class="src">Page en ligne</span><span class="chiffre">11 questions · 0 répondue</span></div>
+      <p>Là où le garagiste tranche ce que la technique ne doit pas décider seule — rôles, accord du client, devis, facture, taux horaire, stock, rappels — et dépose ses idées pour la suite. Enregistrement automatique.</p>
+    </a>
+  </div>
+
+  <h2 class="grp">Piloter</h2>
+  <div class="liste">
+    <a class="carte" href="https://github.com/Layinolias/LeaGarage/blob/main/Documentation/POINT-DE-REPRISE.md">
+      <div class="carte-t"><h3>Point de reprise</h3><span class="src">Dépôt</span></div>
+      <p>Où on en est, ce qui est en cours, ce qui revient à l'utilisateur. À relire en premier à chaque reprise.</p>
+    </a>
+    <a class="carte" href="https://github.com/Layinolias/LeaGarage/blob/main/Documentation/ROADMAP-MODULES-FUTURS.md">
+      <div class="carte-t"><h3>Roadmap des modules</h3><span class="src">Dépôt</span><span class="chiffre">17 modules · 0 fait</span></div>
+      <p>Du fichier clients au reporting : chaque module, sa priorité, son statut, et la question métier dont il dépend.</p>
+    </a>
+    <a class="carte" href="https://github.com/Layinolias/LeaGarage/blob/main/Documentation/PLAN-VERSIONS-V1.md">
+      <div class="carte-t"><h3>Plan de versions</h3><span class="src">Dépôt</span><span class="chiffre">v0.0.0 → v1.0.0</span></div>
+      <p>Le chemin vers une V1.0 démontrable : le parcours complet d'un véhicule, du rendez-vous au rappel d'entretien.</p>
+    </a>
+  </div>
+
+  <h2 class="grp">Vérifier</h2>
+  <div class="liste">
+    <a class="carte vive" href="https://claude.ai/artifact/7i2Q5yU7S3YWkUq61jiYqv">
+      <div class="carte-t"><h3>Checklist de test</h3><span class="src">Page en ligne</span><span class="chiffre">24 points à cocher</span></div>
+      <p>La recette à faire dans un vrai navigateur. Coche directement dans la page, note ce qui coince à côté du point concerné — tout s'enregistre, même en changeant d'appareil.</p>
+    </a>
+    <a class="carte" href="https://github.com/Layinolias/LeaGarage/blob/main/Documentation/CHECKLIST-QA-V1.md">
+      <div class="carte-t"><h3>Checklist — version dépôt</h3><span class="src">Dépôt</span></div>
+      <p>La même checklist en markdown : c'est d'elle qu'est régénérée la page à cocher.</p>
+    </a>
+    <a class="carte" href="https://github.com/Layinolias/LeaGarage/blob/main/Documentation/BUGS-CONNUS.md">
+      <div class="carte-t"><h3>Bugs et écarts connus</h3><span class="src">Dépôt</span><span class="chiffre">0 ouvert</span></div>
+      <p>Trace datée de ce qui a coincé et de sa correction — et les défauts de VIGIE HSE évités dès la conception.</p>
+    </a>
+  </div>
+
+  <h2 class="grp">Comprendre le fonctionnement</h2>
+  <div class="liste">
+    <a class="carte" href="https://github.com/Layinolias/LeaGarage/blob/main/Documentation/ETAT-DU-PROJET.md">
+      <div class="carte-t"><h3>État du projet</h3><span class="src">Dépôt</span></div>
+      <p>La référence technique : stack, modèle de données, rôles proposés, pièges connus. À lire avant toute intervention sur le code.</p>
+    </a>
+    <a class="carte" href="https://github.com/Layinolias/LeaGarage/blob/main/Documentation/QUESTIONS-METIER-EN-ATTENTE.md">
+      <div class="carte-t"><h3>Registre des questions métier</h3><span class="src">Dépôt</span></div>
+      <p>La version consignée des questions posées au garagiste ; ses réponses y sont reportées pour en garder la trace.</p>
+    </a>
+    <a class="carte" href="https://github.com/Layinolias/LeaGarage/blob/main/Documentation/PROMPT-GENERATION-DONNEES-TEST.md">
+      <div class="carte-t"><h3>Données de démonstration</h3><span class="src">Dépôt</span></div>
+      <p>Le garage fictif « Garage des Tilleuls », ses règles de cohérence, et les colonnes attendues par chaque module.</p>
+    </a>
+  </div>
+
+  <h2 class="grp">Le produit</h2>
+  <div class="liste">
+    <div class="carte bientot">
+      <div class="carte-t"><h3>L'application</h3><span class="src">Bientôt</span><span class="chiffre">0 écran</span></div>
+      <p>Sera en ligne à la v0.1.0 sur <span style="font-family:'JetBrains Mono',monospace;font-size:12.5px">layinolias.github.io/LeaGarage</span>.</p>
+    </div>
+    <a class="carte" href="https://github.com/Layinolias/LeaGarage">
+      <div class="carte-t"><h3>Dépôt du code</h3><span class="src">Dépôt</span></div>
+      <p>Le code source et l'historique complet, commit par commit.</p>
+    </a>
+  </div>
+
+  <footer>
+    <p>Les documents du dépôt s'ouvrent sur GitHub. Le cahier et la checklist demandent d'être connecté avec un compte de la même organisation Claude que le propriétaire pour pouvoir y écrire ; ils doivent aussi être partagés depuis leur menu « Partager » pour que d'autres personnes puissent les ouvrir.</p>
+  </footer>
+</div>
