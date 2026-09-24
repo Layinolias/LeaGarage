@@ -7,7 +7,7 @@ Fichier de passage de relais entre sessions. **À relire en premier en début de
 - Poste de pilotage : https://claude.ai/artifact/CWzjSQM17h9mcArNDJTJjY
 - Cahier du garagiste : https://claude.ai/artifact/4ditqAiLJkz7pkmo4cM9yh (collections `reponses`, `idees`)
 - Checklist QA en ligne : https://claude.ai/artifact/7i2Q5yU7S3YWkUq61jiYqv (collection `items`)
-- Dépôt : https://github.com/Layinolias/LeaGarage — site (à partir de v0.1.0) : https://layinolias.github.io/LeaGarage/
+- Dépôt : https://github.com/Layinolias/LeaGarage — site en ligne : https://layinolias.github.io/LeaGarage/
 - Projet frère, modèle de l'outillage : `E:\Vigie-Hse`
 
 ## Travail en cours, non terminé
@@ -19,7 +19,7 @@ Auparavant : **v0.0.0 livrée le 2026-09-23** : outillage de pilotage repris de 
 ## Ce qui revient à l'utilisateur (je ne peux pas le faire)
 
 - ~~Créer le dépôt GitHub `LeaGarage`~~ — fait le 2026-09-23 (public), premier push `main` + tag `v0.0.0`. Le remote `origin` n'embarque **aucun jeton** : l'authentification passe par le gestionnaire d'identifiants de Git (`manager-core`).
-- **Activer GitHub Pages** (Settings → Pages → `main` / racine) une fois le premier push fait.
+- ~~Activer GitHub Pages~~ — actif, vérifié le 2026-09-24 : https://layinolias.github.io/LeaGarage/ sert la vitrine et `assets/lea.css`.
 - **Partager** le cahier du garagiste et la checklist depuis leur menu « Partager » (elles sont privées à la création), et envoyer le lien du cahier au garagiste référent.
 - **Désigner le garagiste référent** (qui répond au cahier).
 
