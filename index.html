@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LeaGarage — Garage des Tilleuls</title>
+<meta name="description" content="LeaGarage, logiciel de gestion d'atelier pour garage indépendant — démonstration.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@600;700&family=Public+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="assets/lea.css">
+<style>
+  /* ---------- barre du haut ---------- */
+  .barre{ border-bottom:1px solid var(--line); background:var(--surface); }
+  .barre .conteneur{ display:flex; align-items:center; gap:14px; min-height:62px; }
+  .marque{ display:flex; align-items:center; gap:12px; text-decoration:none; color:var(--text); }
+  .marque .plaque{ font-size:12px; }
+  .marque b{ font-family:var(--f-titre); font-size:22px; font-weight:700; letter-spacing:.01em; }
+  .barre nav{ margin-left:auto; display:flex; gap:18px; align-items:center; }
+  .barre nav a{ color:var(--muted); text-decoration:none; font-size:14px; font-weight:500; }
+  .barre nav a:hover{ color:var(--accent); }
+  @media (max-width:720px){ .barre nav .ancre{ display:none; } }
+
+  /* ---------- en-tête ---------- */
+  .tete{ padding-block:56px 40px; display:grid; grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr); gap:48px; align-items:center; }
+  @media (max-width:900px){ .tete{ grid-template-columns:1fr; gap:32px; padding-block:36px 28px; } }
+  .tete h1{ font-size:clamp(40px, 6.2vw, 68px); font-weight:700; line-height:.98; margin:12px 0 0; letter-spacing:-.005em; }
+  .tete .accroche{ font-size:19px; color:var(--text); margin:16px 0 0; max-width:34ch; }
+  .tete .explication{ color:var(--muted); margin:14px 0 0; max-width:56ch; }
+  .actions{ display:flex; flex-wrap:wrap; gap:12px; margin:26px 0 0; align-items:center; }
+  .note-cta{ font-size:13px; color:var(--faint); margin:10px 0 0; }
+
+  /* fiche d'atelier d'exemple */
+  .fiche{ background:var(--surface); border:1px solid var(--line); border-radius:var(--rayon); box-shadow:var(--shadow); overflow:hidden; }
+  .fiche-haut{ display:flex; align-items:center; justify-content:space-between; gap:10px; padding:14px 18px; border-bottom:1px dashed var(--line-strong); }
+  .fiche-haut .mono{ font-size:12px; color:var(--faint); }
+  .fiche-corps{ padding:16px 18px 18px; display:grid; gap:14px; }
+  .fiche .plaque{ font-size:19px; }
+  .fiche .vehicule{ display:flex; align-items:center; gap:14px; flex-wrap:wrap; }
+  .fiche .vehicule div{ font-size:14px; color:var(--muted); }
+  .fiche .vehicule strong{ display:block; color:var(--text); font-size:15px; }
+  .fiche dl{ display:grid; grid-template-columns:auto 1fr; gap:6px 14px; margin:0; font-size:13.5px; }
+  .fiche dt{ color:var(--faint); }
+  .fiche dd{ margin:0; }
+  .fiche ul{ list-style:none; margin:0; padding:0; border-top:1px solid var(--line); }
+  .fiche li{ display:flex; justify-content:space-between; gap:12px; padding:8px 0; border-bottom:1px solid var(--line); font-size:13.5px; }
+  .fiche li .mono{ color:var(--muted); font-size:12.5px; white-space:nowrap; }
+  .fiche-bas{ display:flex; justify-content:space-between; align-items:baseline; gap:10px; }
+  .fiche-bas .mono{ font-size:20px; font-weight:600; }
+  .exemple{ font-size:11.5px; color:var(--faint); text-align:right; margin:8px 2px 0; }
+
+  /* ---------- sections ---------- */
+  section.bloc{ padding-block:44px; border-top:1px solid var(--line); }
+  section.bloc > .conteneur > h2{ font-size:clamp(28px, 3.6vw, 38px); margin:8px 0 0; }
+  section.bloc > .conteneur > .intro{ color:var(--muted); max-width:62ch; margin:10px 0 0; }
+
+  /* parcours : une vraie séquence, d'où la numérotation */
+  .parcours{ list-style:none; margin:28px 0 0; padding:0; display:grid; grid-template-columns:repeat(6, minmax(0,1fr)); gap:0; counter-reset:etape; }
+  @media (max-width:960px){ .parcours{ grid-template-columns:repeat(3, minmax(0,1fr)); row-gap:22px; } }
+  @media (max-width:520px){ .parcours{ grid-template-columns:1fr; row-gap:0; } }
+  .parcours li{ counter-increment:etape; position:relative; padding:0 16px 0 0; }
+  .parcours li::before{ content:counter(etape); display:flex; align-items:center; justify-content:center; width:34px; height:34px; border-radius:50%; background:var(--surface); border:2px solid var(--accent); color:var(--accent); font:700 16px var(--f-titre); position:relative; z-index:1; }
+  .parcours li::after{ content:""; position:absolute; top:16px; left:34px; right:0; border-top:2px dashed var(--line-strong); }
+  .parcours li:last-child::after{ display:none; }
+  .parcours h3{ font-size:20px; margin:12px 0 0; }
+  .parcours p{ color:var(--muted); font-size:13.5px; margin:4px 0 0; }
+  @media (max-width:520px){
+    .parcours li{ padding:0 0 18px 50px; min-height:52px; }
+    .parcours li::before{ position:absolute; left:0; top:0; }
+    .parcours li::after{ top:34px; bottom:0; left:16px; right:auto; border-top:none; border-left:2px dashed var(--line-strong); }
+    .parcours h3{ margin:4px 0 0; }
+  }
+
+  /* modules */
+  .famille{ margin:30px 0 0; }
+  .famille h3{ font-size:14px; font-weight:600; letter-spacing:.14em; text-transform:uppercase; color:var(--faint); }
+  .grille{ display:grid; grid-template-columns:repeat(auto-fill, minmax(250px, 1fr)); gap:12px; margin:12px 0 0; }
+  .module{ display:grid; grid-template-columns:40px 1fr; gap:4px 14px; align-items:start; background:var(--surface); border:1px solid var(--line); border-radius:var(--rayon); padding:15px 16px; }
+  .module .ico{ grid-row:span 3; width:40px; height:40px; border-radius:9px; background:var(--accent-soft); color:var(--accent); display:flex; align-items:center; justify-content:center; }
+  .module .ico svg{ width:22px; height:22px; }
+  .module h4{ font-size:19px; }
+  .module p{ color:var(--muted); font-size:13.5px; }
+  .module .pastille{ justify-self:start; margin-top:6px; }
+
+  /* comptes */
+  .tableau{ overflow-x:auto; margin:22px 0 0; border:1px solid var(--line); border-radius:var(--rayon); background:var(--surface); }
+  table{ border-collapse:collapse; width:100%; font-size:14px; }
+  th, td{ text-align:left; padding:11px 16px; border-bottom:1px solid var(--line); white-space:nowrap; }
+  thead th{ background:var(--inset); font-size:12px; font-weight:600; color:var(--muted); letter-spacing:.03em; }
+  tbody tr:last-child td{ border-bottom:none; }
+  td.role{ white-space:normal; color:var(--muted); min-width:220px; }
+
+  /* prototype */
+  .prototype{ display:grid; grid-template-columns:minmax(0,1fr) auto; gap:24px; align-items:start; background:var(--voyant-soft); border:1px solid var(--voyant); border-radius:var(--rayon); padding:22px 24px; margin:22px 0 0; }
+  @media (max-width:760px){ .prototype{ grid-template-columns:1fr; padding:18px; } }
+  .prototype h3{ font-size:22px; }
+  .prototype ul{ margin:10px 0 0; padding-left:20px; color:var(--text); font-size:14px; }
+  .prototype li{ margin:4px 0; }
+  .reinit{ display:grid; gap:10px; justify-items:start; min-width:240px; }
+  .reinit p{ font-size:13px; color:var(--muted); max-width:34ch; }
+  .reinit .confirmer{ display:flex; flex-wrap:wrap; gap:8px; }
+  .reinit .resultat{ font-size:13px; font-weight:600; color:var(--ok); }
+
+  /* pied de page */
+  .pied{ border-top:1px solid var(--line); padding-block:28px 40px; color:var(--muted); font-size:13.5px; }
+  .pied .conteneur{ display:flex; flex-wrap:wrap; gap:14px 40px; justify-content:space-between; }
+  .pied strong{ color:var(--text); font-family:var(--f-titre); font-size:18px; font-weight:600; display:block; }
+</style>
+</head>
+<body>
+
+<!-- Icônes : sprite SVG local, trait 1.8, 24×24. Une icône par module de la roadmap. -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-socle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16a8 8 0 1 1 16 0"/><path d="M12 16l4-5"/><circle cx="12" cy="16" r="1.4"/><path d="M4 20h16"/></symbol>
+    <symbol id="i-vehicule" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 16v-3.5l2-5A2 2 0 0 1 6.9 6h10.2a2 2 0 0 1 1.9 1.5l2 5V16"/><path d="M3 12.5h18"/><rect x="3" y="16" width="18" height="2.5" rx="1"/><circle cx="7.5" cy="14.3" r=".6"/><circle cx="16.5" cy="14.3" r=".6"/></symbol>
+    <symbol id="i-agenda" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/><path d="M8 14h3v3H8z"/></symbol>
+    <symbol id="i-reception" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4.5" width="14" height="16" rx="2"/><path d="M9 3h6v3H9z"/><path d="M8.5 13l2.5 2.5 4.5-5"/></symbol>
+    <symbol id="i-devis" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6.5A1.5 1.5 0 0 0 5 4.5v15A1.5 1.5 0 0 0 6.5 21h11a1.5 1.5 0 0 0 1.5-1.5V8z"/><path d="M14 3v5h5"/><path d="M14.5 13.2a2.6 2.6 0 1 0 0 3.6M9 14.2h4.2M9 15.8h4.2"/></symbol>
+    <symbol id="i-cle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0 5 5l-9.9 9.9a2 2 0 0 1-2.8-2.8z"/><path d="M14.7 6.3l2.3-2.3a4 4 0 0 1 3 3l-2.3 2.3"/></symbol>
+    <symbol id="i-facture" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6M9 16h3"/></symbol>
+    <symbol id="i-chrono" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13.5" r="7"/><path d="M12 13.5V10M10 3h4M12 3v3.5M18 7l1.5-1.5"/></symbol>
+    <symbol id="i-stock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 8L12 4l8.5 4v8L12 20l-8.5-4z"/><path d="M3.5 8L12 12l8.5-4M12 12v8"/></symbol>
+    <symbol id="i-camion" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 6h11v10h-11zM13.5 9.5h4l3 3.2V16h-7"/><circle cx="6.5" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/></symbol>
+    <symbol id="i-cloche" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 20.5a2 2 0 0 0 4 0"/></symbol>
+    <symbol id="i-pret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="12" r="4"/><path d="M12 12h9M18 12v3M15 12v2"/></symbol>
+    <symbol id="i-bouclier" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5.5c0 4.3-3 7.7-7 9.5-4-1.8-7-5.2-7-9.5V6z"/><path d="M9 12l2 2 4-4"/></symbol>
+    <symbol id="i-goutte" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5s6 6.4 6 10.5a6 6 0 0 1-12 0c0-4.1 6-10.5 6-10.5z"/><path d="M9.5 14.5a2.5 2.5 0 0 0 2.5 2.5"/></symbol>
+    <symbol id="i-etiquette" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 12.5V4.5a1 1 0 0 1 1-1h8l8 8-9 9z"/><circle cx="8.5" cy="8.5" r="1.5"/></symbol>
+    <symbol id="i-graph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V4M4 20h16"/><path d="M8 16v-4M12 16V8M16 16v-6"/></symbol>
+    <symbol id="i-reglages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1"/><circle cx="15" cy="6" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="17" cy="18" r="2"/></symbol>
+  </defs>
+</svg>
+
+<header class="barre">
+  <div class="conteneur">
+    <a class="marque" href="./" aria-label="LeaGarage — accueil">
+      <span class="plaque" aria-hidden="true"><span class="ue">F</span><span class="txt">LEA-GA-RAGE</span></span>
+      <b>LeaGarage</b>
+    </a>
+    <nav aria-label="Navigation principale">
+      <a class="ancre" href="#parcours">Le parcours</a>
+      <a class="ancre" href="#modules">Les modules</a>
+      <a class="ancre" href="#demonstration">Démonstration</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="conteneur tete">
+    <div>
+      <span class="surtitre">Logiciel d'atelier · démonstration</span>
+      <h1 data-param="nom">Garage des Tilleuls</h1>
+      <p class="accroche" data-param="accroche">Mécanique toutes marques, entretien et diagnostic</p>
+      <p class="explication">LeaGarage suit chaque véhicule de l'appel du client jusqu'au prochain entretien : rendez-vous, réception, devis, ordre de réparation, facture et rappel — au même endroit, du comptoir à l'atelier.</p>
+      <div class="actions">
+        <!-- À relier à login.html quand l'écran de connexion existera (v0.1.0). -->
+        <a class="btn btn-principal" role="link" aria-disabled="true" id="btnDemo">Accéder à la démonstration</a>
+        <a class="btn btn-secondaire" href="#parcours">Voir le parcours</a>
+      </div>
+      <p class="note-cta" id="noteDemo" tabindex="-1">L'écran de connexion est la prochaine étape du projet : les comptes de démonstration ci-dessous y serviront.</p>
+    </div>
+
+    <div>
+      <article class="fiche" aria-label="Exemple d'ordre de réparation">
+        <div class="fiche-haut">
+          <span class="surtitre">Ordre de réparation</span>
+          <span class="mono">OR-2026-0142</span>
+        </div>
+        <div class="fiche-corps">
+          <div class="vehicule">
+            <span class="plaque"><span class="ue">F</span><span class="txt">GT-042-TL</span></span>
+            <div><strong>Peugeot 308 · 1.2 PureTech 130</strong>84 312 km à la réception</div>
+          </div>
+          <dl>
+            <dt>Client</dt><dd>M. Bastien Morel</dd>
+            <dt>Mécanicien</dt><dd>Karim · pont 2</dd>
+            <dt>Restitution</dt><dd>Aujourd'hui, 17 h 30</dd>
+          </dl>
+          <ul>
+            <li><span>Vidange moteur et filtre à huile</span><span class="mono">0,8 h</span></li>
+            <li><span>Plaquettes de frein avant</span><span class="mono">1,1 h</span></li>
+            <li><span>Contrôle des niveaux et des pneus</span><span class="mono">0,3 h</span></li>
+          </ul>
+          <div class="fiche-bas">
+            <span class="pastille ok">Prêt à restituer</span>
+            <span class="mono">412,60 €</span>
+          </div>
+        </div>
+      </article>
+      <p class="exemple">Exemple fictif — véhicule, client et montant inventés.</p>
+    </div>
+  </div>
+
+  <section class="bloc" id="parcours" aria-labelledby="t-parcours">
+    <div class="conteneur">
+      <span class="surtitre">Le parcours d'un véhicule</span>
+      <h2 id="t-parcours">Du coup de téléphone au prochain entretien</h2>
+      <p class="intro">Le cœur de LeaGarage suit l'ordre réel d'un passage à l'atelier. Chaque étape reprend ce qui a été saisi à la précédente : rien ne se retape.</p>
+      <ol class="parcours">
+        <li><h3>Rendez-vous</h3><p>Le créneau, le pont et le mécanicien, selon la durée prévue des travaux.</p></li>
+        <li><h3>Réception</h3><p>Kilométrage, carburant, état du véhicule et demande du client, signés au comptoir.</p></li>
+        <li><h3>Devis</h3><p>Main-d'œuvre et pièces chiffrées, envoyées, acceptées ou refusées.</p></li>
+        <li><h3>Réparation</h3><p>L'ordre de réparation : temps pointés, pièces sorties du stock, travaux découverts.</p></li>
+        <li><h3>Facture</h3><p>Générée depuis l'ordre de réparation, encaissée en une ou plusieurs fois.</p></li>
+        <li><h3>Rappel</h3><p>La prochaine vidange ou le contrôle technique, programmés avant le départ du client.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="bloc" id="modules" aria-labelledby="t-modules">
+    <div class="conteneur">
+      <span class="surtitre">Les modules</span>
+      <h2 id="t-modules">Ce que LeaGarage couvrira</h2>
+      <p class="intro">Le projet démarre : aucun module n'est encore ouvert. Ils arriveront dans cet ordre, en commençant par le parcours ci-dessus.</p>
+
+      <div class="famille">
+        <h3>Le parcours</h3>
+        <div class="grille">
+          <div class="module"><span class="ico"><svg aria-hidden="true"><use href="#i-vehicule"/></svg></span><h4>Clients &amp; véhicules</h4><p>Fiches clients, véhicules, historique ; recherche par immatriculation.</p><span class="pastille">À venir</span></div>
+          <div class="module"><span class="ico"><svg aria-hidden="true"><use href="#i-agenda"/></svg></span><h4>Rendez-vous &amp; planning</h4><p>Agenda de l'atelier par pont et par mécanicien.</p><span class="pastille">À venir</span></div>
+          <div class="module"><span class="ico"><svg aria-hidden="true"><use href="#i-reception"/></svg></span><h4>Réception du véhicule</h4><p>État des lieux, demande du client, fiche à signer.</p><span class="pastille">À venir</span></div>
+          <div class="module"><span class="ico"><svg aria-hidden="true"><use href="#i-devis"/></svg></span><h4>Devis</h4><p>Chiffrage, envoi, acceptation, transformation en réparation.</p><span class="pastille">À venir</span></div>
+          <div class="module"><span class="ico"><svg aria-hidden="true"><use href="#i-cle"/></svg></span><h4>Ordres de réparation</h4><p>Travaux, pointage des temps, pièces utilisées, contrôle final.</p><span class="pastille">À venir</span></div>
+          <div class="module"><span class="ico"><svg aria-hidden="true"><use href="#i-facture"/></svg></span><h4>Facturation</h4><p>Factures, acomptes, encaissements, relances.</p><span class="pastille">À venir</span></div>
+          <div class="module"><span class="ico"><svg aria-hidden="true"><use href="#i-chrono"/></svg></span><h4>Main-d'œuvre &amp; forfaits</h4><p>Opérations types, temps barèmes, forfaits vidange ou freinage.</p><span class="pastille">À venir</span></div>
+        </div>
+      </div>
+
+      <div class="famille">
+        <h3>Le suivi</h3>
+        <div class="grille">
+          <div class="module"><span class="ico"><svg aria-hidden="true"><use href="#i-stock"/></svg></span><h4>Stock de pièces</h4><p>Références, emplacements, quantités, alertes.</p><span class="pastille">À venir</span></div>
+          <div class="module"><span class="ico"><svg aria-hidden="true"><use href="#i-camion"/></svg></span><h4>Commandes fournisseurs</h4><p>Commandes, réceptions partielles, rapprochement des factures.</p><span class="pastille">À venir</span></div>
+          <div class="module"><span class="ico"><svg aria-hidden="true"><use href="#i-cloche"/></svg></span><h4>Entretien &amp; rappels</h4><p>Échéances par véhicule : vidange, contrôle technique, distribution.</p><span class="pastille">À venir</span></div>
+          <div class="module"><span class="ico"><svg aria-hidden="true"><use href="#i-pret"/></svg></span><h4>Véhicules de prêt</h4><p>Parc de courtoisie, contrats de prêt, disponibilités.</p><span class="pastille">À venir</span></div>
+          <div class="module"><span class="ico"><svg aria-hidden="true"><use href="#i-bouclier"/></svg></span><h4>Garanties &amp; retours</h4><p>Réclamations clients, reprises sous garantie.</p><span class="pastille">À venir</span></div>
+        </div>
+      </div>
+
+      <div class="famille">
+        <h3>Conformité, pilotage et administration</h3>
+        <div class="grille">
+          <div class="module"><span class="ico"><svg aria-hidden="true"><use href="#i-goutte"/></svg></span><h4>Déchets &amp; environnement</h4><p>Huiles usagées, filtres, batteries : enlèvements et justificatifs.</p><span class="pastille">À venir</span></div>
+          <div class="module"><span class="ico"><svg aria-hidden="true"><use href="#i-etiquette"/></svg></span><h4>Véhicules d'occasion</h4><p>Achat, remise en état, revente — si le garage en fait.</p><span class="pastille">À confirmer</span></div>
+          <div class="module"><span class="ico"><svg aria-hidden="true"><use href="#i-graph"/></svg></span><h4>Indicateurs</h4><p>Chiffre d'affaires, occupation de l'atelier, marge sur les pièces.</p><span class="pastille">À venir</span></div>
+          <div class="module"><span class="ico"><svg aria-hidden="true"><use href="#i-socle"/></svg></span><h4>Tableau de bord</h4><p>Les véhicules du jour, les devis en attente, les factures impayées.</p><span class="pastille accent">En cours</span></div>
+          <div class="module"><span class="ico"><svg aria-hidden="true"><use href="#i-reglages"/></svg></span><h4>Administration</h4><p>Utilisateurs, droits, listes, paramètres du garage.</p><span class="pastille">À venir</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bloc" id="demonstration" aria-labelledby="t-demo">
+    <div class="conteneur">
+      <span class="surtitre">Démonstration</span>
+      <h2 id="t-demo">Les comptes de démonstration</h2>
+      <p class="intro">Un compte par poste du garage : chacun ne verra que les écrans de son métier. Ils serviront dès que l'écran de connexion sera en place.</p>
+      <div class="tableau">
+        <table>
+          <thead><tr><th>Poste</th><th>Identifiant</th><th>Mot de passe</th><th>Ce qu'il fait</th></tr></thead>
+          <tbody>
+            <tr><td>Gérant</td><td><code>gerant@garage-tilleuls.fr</code></td><td><code>gerant1234</code></td><td class="role">Tout, y compris les paramètres du garage et les droits.</td></tr>
+            <tr><td>Accueil</td><td><code>ACC1</code></td><td><code>1234</code></td><td class="role">Clients, rendez-vous, réception, devis, factures.</td></tr>
+            <tr><td>Chef d'atelier</td><td><code>CA1</code></td><td><code>1234</code></td><td class="role">Planning, affectation des réparations, stock.</td></tr>
+            <tr><td>Mécanicien</td><td><code>MEC1</code> · <code>MEC2</code></td><td><code>1234</code></td><td class="role">Ses ordres de réparation : temps, pièces, remarques.</td></tr>
+            <tr><td>Comptable</td><td><code>COMPTA1</code></td><td><code>1234</code></td><td class="role">Consultation des factures et exports.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="prototype" role="note" aria-labelledby="t-proto">
+        <div>
+          <h3 id="t-proto">Ceci est un prototype</h3>
+          <ul>
+            <li><b>Aucun serveur</b> : ce que vous saisissez reste dans ce navigateur, sur cet appareil. Une autre personne ne le verra pas.</li>
+            <li><b>Données fictives</b> : le garage, les clients et les véhicules sont inventés. N'y saisissez pas de vrais clients.</li>
+            <li><b>Connexion simplifiée</b> : les mots de passe sont publics, ils ne protègent rien.</li>
+            <li><b>Documents de démonstration</b> : devis et factures produits ici n'ont pas de valeur légale.</li>
+          </ul>
+        </div>
+        <div class="reinit">
+          <p>Revenir aux données de démonstration d'origine, en effaçant tout ce qui a été saisi dans ce navigateur.</p>
+          <button type="button" class="btn btn-secondaire" id="btnReinit">Réinitialiser les données</button>
+          <div class="confirmer" id="confirmer" hidden>
+            <button type="button" class="btn btn-danger" id="btnReinitOui">Oui, tout effacer</button>
+            <button type="button" class="btn btn-secondaire" id="btnReinitNon">Annuler</button>
+          </div>
+          <p class="resultat" id="resultatReinit" role="status" hidden></p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="pied">
+  <div class="conteneur">
+    <div>
+      <strong data-param="nom">Garage des Tilleuls</strong>
+      <span data-param="adresse">Zone artisanale des Tilleuls, Verchamps</span><br>
+      <span data-param="horaires">Lundi au vendredi 8 h – 12 h, 13 h 30 – 18 h 30 · samedi 8 h – 12 h</span>
+    </div>
+    <div>
+      <strong>LeaGarage</strong>
+      Prototype · version <span class="mono">0.1.0</span> en cours<br>
+      <a href="https://github.com/Layinolias/LeaGarage">Code source et documentation</a>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/parametres.js"></script>
+<script src="assets/reinitialiser.js"></script>
+<script>
+  // Nom, accroche, adresse et horaires viennent des paramètres du garage (textContent : pas d'échappement nécessaire).
+  (function(){
+    var p = window.LeaParametres.lire();
+    document.querySelectorAll("[data-param]").forEach(function(el){
+      var v = p[el.getAttribute("data-param")];
+      if (typeof v === "string" && v.trim()) el.textContent = v;
+    });
+    document.title = "LeaGarage — " + p.nom;
+
+    // Bouton de démonstration : inactif tant que l'écran de connexion n'existe pas.
+    document.getElementById("btnDemo").addEventListener("click", function(e){
+      if (this.getAttribute("aria-disabled") === "true"){ e.preventDefault(); document.getElementById("noteDemo").focus(); }
+    });
+
+    // Réinitialisation avec confirmation dans la page.
+    var btn = document.getElementById("btnReinit"), conf = document.getElementById("confirmer"), res = document.getElementById("resultatReinit");
+    btn.addEventListener("click", function(){ btn.hidden = true; conf.hidden = false; res.hidden = true; document.getElementById("btnReinitNon").focus(); });
+    document.getElementById("btnReinitNon").addEventListener("click", function(){ conf.hidden = true; btn.hidden = false; btn.focus(); });
+    document.getElementById("btnReinitOui").addEventListener("click", function(){
+      window.LeaReinitialiser();
+      conf.hidden = true; btn.hidden = false;
+      res.textContent = "Données effacées : la démonstration repart de son état d'origine.";
+      res.hidden = false;
+      var p2 = window.LeaParametres.lire();
+      document.querySelectorAll("[data-param]").forEach(function(el){ el.textContent = p2[el.getAttribute("data-param")]; });
+      document.title = "LeaGarage — " + p2.nom;
+    });
+  })();
+</script>
+</body>
+</html>

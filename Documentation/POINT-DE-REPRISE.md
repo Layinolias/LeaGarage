@@ -1,4 +1,4 @@
-# Point de reprise — 23 septembre 2026
+# Point de reprise — 24 septembre 2026
 
 Fichier de passage de relais entre sessions. **À relire en premier en début de session ou après une compaction**, avec `CLAUDE.md`. L'état durable est dans `ETAT-DU-PROJET.md`, `ROADMAP-MODULES-FUTURS.md` et `QUESTIONS-METIER-EN-ATTENTE.md` — ne pas le dupliquer ici.
 
@@ -12,7 +12,9 @@ Fichier de passage de relais entre sessions. **À relire en premier en début de
 
 ## Travail en cours, non terminé
 
-_Rien en cours._ **v0.0.0 livrée le 2026-09-23** : outillage de pilotage repris de VIGIE HSE et adapté au garage — `CLAUDE.md` (15 règles, dont 4 nouvelles tirées des erreurs de VIGIE : `esc()` dès la 1re page, dates locales, montants en centimes, harnais dans le dépôt), rappel de début de session, serveur local `outils/serve.js`, 8 documents de suivi, composants `assets/esc.js`, `dates-locales.js`, `montants.js` (15/15 contrôles, `outils/tests/test-assets.js`), 3 pages en ligne dont les sources sont dans `outils/pages-en-ligne/`.
+**v0.1.0 en cours.** Fait le 2026-09-24 : **vitrine `index.html`** (nom du garage lu dans les paramètres, parcours en 6 étapes, grille des 17 modules, comptes de démonstration, avertissement prototype, réinitialisation confirmée dans la page), feuille de style commune `assets/lea.css`, `assets/parametres.js`, `assets/reinitialiser.js`. Vérifié : 22/22 contrôles `test-assets.js` ; dans le navigateur via `outils/serve.js`, aucun défilement horizontal à 375 px et 1366 px, un nom de garage contenant `<b>` s'affiche en texte, la réinitialisation remet le nom par défaut et **laisse intacte une clé VIGIE témoin**, console sans erreur. Non vérifié à l'œil : le rendu visuel (captures impossibles, fenêtre masquée) et le thème sombre. Le bouton « Accéder à la démonstration » est grisé en attendant `login.html`.
+
+Auparavant : **v0.0.0 livrée le 2026-09-23** : outillage de pilotage repris de VIGIE HSE et adapté au garage — `CLAUDE.md` (15 règles, dont 4 nouvelles tirées des erreurs de VIGIE : `esc()` dès la 1re page, dates locales, montants en centimes, harnais dans le dépôt), rappel de début de session, serveur local `outils/serve.js`, 8 documents de suivi, composants `assets/esc.js`, `dates-locales.js`, `montants.js` (15/15 contrôles, `outils/tests/test-assets.js`), 3 pages en ligne dont les sources sont dans `outils/pages-en-ligne/`.
 
 ## Ce qui revient à l'utilisateur (je ne peux pas le faire)
 
@@ -23,7 +25,7 @@ _Rien en cours._ **v0.0.0 livrée le 2026-09-23** : outillage de pilotage repris
 
 ## Reste à faire
 
-- v0.1.0 : vitrine, connexion, feuille de style commune `assets/lea.css`, Paramètres du garage — voir `PLAN-VERSIONS-V1.md`. Les rôles dépendent de Q1 ; on peut commencer avec la proposition de `ETAT-DU-PROJET.md` §7 et ajuster.
+- Fin de la v0.1.0 : `login.html` (puis dégriser le bouton de la vitrine et passer le module « Tableau de bord » en « En cours »/« Fait »), cockpit `dashboard.html`, écran Paramètres du garage — voir `PLAN-VERSIONS-V1.md`. Les rôles dépendent de Q1 ; on peut commencer avec la proposition de `ETAT-DU-PROJET.md` §7 et ajuster.
 - Relire le cahier au début de chaque session et reporter les réponses dans `QUESTIONS-METIER-EN-ATTENTE.md`.
 
 ## Où sont les tests

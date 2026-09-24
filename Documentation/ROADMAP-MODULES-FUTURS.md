@@ -1,8 +1,8 @@
 # LEAGARAGE — Roadmap des modules
 
-## 🔝 Point de reprise (2026-09-23)
+## 🔝 Point de reprise (2026-09-24)
 
-Outillage de pilotage en place (repris de VIGIE HSE). **Aucun module construit.** Prochaine étape : v0.1.0 (voir `PLAN-VERSIONS-V1.md`). Les premières questions métier sont posées au garagiste référent (`QUESTIONS-METIER-EN-ATTENTE.md`) ; plusieurs modules en dépendent.
+Outillage de pilotage en place (repris de VIGIE HSE). **Aucun module métier construit** ; le socle a sa vitrine (`index.html`). Prochaine étape : fin de la v0.1.0 — connexion, cockpit, Paramètres (voir `PLAN-VERSIONS-V1.md`). Les premières questions métier sont posées au garagiste référent (`QUESTIONS-METIER-EN-ATTENTE.md`) ; plusieurs modules en dépendent.
 
 **Légende statut :** ❌ Non démarré · 🔶 Base posée · ✅ Fait · 💤 En pause · ❓ Attend une réponse métier
 
@@ -12,7 +12,7 @@ Outillage de pilotage en place (repris de VIGIE HSE). **Aucun module construit.*
 
 | # | Module | Priorité | Statut | Dépend de |
 |---|---|---|---|---|
-| 0 | Socle : vitrine, connexion, cockpit, paramètres du garage | Socle | ❌ | Q1 (rôles) |
+| 0 | Socle : vitrine, connexion, cockpit, paramètres du garage | Socle | 🔶 vitrine faite | Q1 (rôles) |
 | 1 | Clients & véhicules | Cœur | ❌ | — |
 | 2 | Rendez-vous & planning atelier | Cœur | ❌ | — |
 | 3 | Réception du véhicule (état des lieux, accord client) | Cœur | ❌ ❓ | Q2 |
@@ -43,7 +43,7 @@ Leçon directe de VIGIE HSE, qui a dû rendre configurable après coup un vocabu
 
 ---
 
-## 0. Socle — ❌
+## 0. Socle — 🔶 vitrine faite (2026-09-24)
 Vitrine publique (`index.html`), connexion par rôles (`login.html`), cockpit (`dashboard.html` : véhicules du jour, OR en cours, devis en attente, factures impayées, rappels à envoyer), écran Paramètres du garage. Bouton « Réinitialiser les données de démonstration » assumé, bandeau « prototype ».
 
 ## 1. Clients & véhicules — ❌

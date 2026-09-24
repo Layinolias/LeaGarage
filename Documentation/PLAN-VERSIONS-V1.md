@@ -14,7 +14,9 @@ Schéma : `MAJOR.MINOR.PATCH` — `MINOR` pour un module ou une fonctionnalité 
 ### v0.0.0 — Outillage de pilotage ✅ (2026-09-23)
 `CLAUDE.md`, rappel de début de session, serveur local, documentation de suivi, composants partagés (`esc`, dates locales, montants) testés, cahier du garagiste et checklist en ligne, poste de pilotage.
 
-### v0.1.0 — Socle
+### v0.1.0 — Socle 🔶 en cours
+Fait : vitrine `index.html` et feuille de style commune (2026-09-24). À faire : connexion, cockpit, Paramètres, déploiement vérifié.
+
 Vitrine `index.html` (avec avertissement « prototype » et bouton de réinitialisation), `login.html` avec les comptes de test, feuille de style commune `assets/lea.css` (thèmes clair/sombre), menu latéral, écran **Paramètres du garage**. Déploiement GitHub Pages vérifié dès cette étape (la mise en ligne n'est pas un chantier de fin).
 
 ### v0.2.0 — Clients & véhicules (module 1)

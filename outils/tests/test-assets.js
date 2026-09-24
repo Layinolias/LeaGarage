@@ -6,12 +6,20 @@ const fs = require("fs");
 const path = require("path");
 const vm = require("vm");
 
-const ctx = { window: {}, console };
+// Stockage factice au comportement de localStorage (clés parcourues par key(i)/length).
+function stockage() {
+  const m = new Map();
+  return {
+    getItem: (k) => (m.has(k) ? m.get(k) : null), setItem: (k, v) => m.set(k, String(v)), removeItem: (k) => m.delete(k),
+    key: (i) => [...m.keys()][i] ?? null, get length() { return m.size; },
+  };
+}
+const ctx = { window: {}, console, localStorage: stockage(), sessionStorage: stockage() };
 vm.createContext(ctx);
-for (const f of ["esc.js", "dates-locales.js", "montants.js"]) {
+for (const f of ["esc.js", "dates-locales.js", "montants.js", "parametres.js", "reinitialiser.js"]) {
   vm.runInContext(fs.readFileSync(path.join(__dirname, "..", "..", "assets", f), "utf8"), ctx, { filename: f });
 }
-const { esc, LeaDates, LeaMontants } = ctx.window;
+const { esc, LeaDates, LeaMontants, LeaParametres, LeaReinitialiser } = ctx.window;
 
 let n = 0, ko = 0;
 function egal(obtenu, attendu, libelle) {
@@ -37,6 +45,19 @@ egal(LeaMontants.lire(0.1 + 0.2), 30, "0,1 + 0,2 arrondi au centime");
 egal(Number.isNaN(LeaMontants.lire("abc")), true, "saisie illisible → NaN");
 egal(LeaMontants.tva(1999, 20), 400, "TVA 20 % sur 19,99 €");
 egal(LeaMontants.euros(NaN), "—", "montant illisible affiché —");
+
+egal(LeaParametres.lire().nom, "Garage des Tilleuls", "paramètres : valeur par défaut");
+LeaParametres.ecrire({ nom: "Garage Martin" });
+egal(LeaParametres.lire().nom, "Garage Martin", "paramètres : valeur stockée prioritaire");
+egal(LeaParametres.lire().ville, "Verchamps", "paramètres : clé par défaut fusionnée (always-merge)");
+ctx.localStorage.setItem("leagarage_parametres", "{illisible");
+egal(LeaParametres.lire().nom, "Garage des Tilleuls", "paramètres illisibles → valeurs par défaut");
+ctx.localStorage.setItem("vigie_hse_users", "[]");
+ctx.sessionStorage.setItem("leagarage_session", "x");
+LeaReinitialiser();
+egal(ctx.localStorage.getItem("vigie_hse_users"), "[]", "réinitialiser épargne les clés de VIGIE (même origine en ligne)");
+egal(ctx.localStorage.getItem("leagarage_parametres"), null, "réinitialiser efface les paramètres LeaGarage");
+egal(ctx.sessionStorage.getItem("leagarage_session"), null, "réinitialiser efface la session LeaGarage");
 
 console.log((n - ko) + "/" + n + " contrôles réussis (TZ=" + process.env.TZ + ")");
 process.exit(ko ? 1 : 0);

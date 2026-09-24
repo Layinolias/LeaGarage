@@ -2,7 +2,7 @@
 
 Document de référence. Objectif : permettre à **n'importe qui** — le garage, un développeur humain qui découvre le projet, ou une future session d'IA — de reprendre ce projet sans avoir suivi les échanges qui l'ont produit.
 
-Version active au moment de la rédaction : **v0.0.0** (outillage de pilotage seul, aucune page applicative).
+Version active au moment de la rédaction : **v0.1.0 en cours** — vitrine `index.html` faite ; connexion et paramètres à suivre.
 
 ---
 
@@ -22,7 +22,7 @@ Une application de gestion pour **garage automobile indépendant** — « LeaGar
 Identique à VIGIE HSE, volontairement :
 
 - **HTML/CSS/JavaScript vanilla**, aucun framework, aucune étape de build. Chaque page est un `.html` autonome.
-- **Composants partagés** dans `assets/` dès le départ (leçon VIGIE : le CSS et les assistants dupliqués dans chaque page coûtent cher à corriger) : `esc.js`, `dates-locales.js`, `montants.js` ; un `assets/lea.css` commun est prévu avec la première page.
+- **Composants partagés** dans `assets/` dès le départ (leçon VIGIE : le CSS et les assistants dupliqués dans chaque page coûtent cher à corriger) : `lea.css` (style commun), `esc.js`, `dates-locales.js`, `montants.js`, `parametres.js`, `reinitialiser.js`.
 - **Persistance** : `localStorage` (données) + `sessionStorage` (session de connexion). Préfixe de clé : `leagarage_`.
 - **Import/export Excel** : SheetJS (`xlsx.full.min.js` depuis cdnjs, version épinglée `0.18.5`).
 - **Polices** : Google Fonts — Saira Condensed (titres), Public Sans (texte), JetBrains Mono (chiffres, immatriculations, références pièces).
@@ -46,7 +46,8 @@ LeaGarage/
 ├── CLAUDE.md                  ← aide-mémoire (≤ 200 lignes)
 ├── .claude/settings.json      ← rappel de lecture des fichiers de suivi à chaque début de session
 ├── .claude/launch.json        ← serveur local pour le panneau navigateur
-├── assets/                    ← composants partagés (JS, bientôt CSS)
+├── index.html                 ← vitrine publique
+├── assets/                    ← composants partagés (lea.css + assistants JS)
 ├── DATATEST/                  ← jeux de données de démonstration .xlsx (vide)
 ├── Documentation/             ← ce dossier
 └── outils/                    ← serve.js, tests/
@@ -61,10 +62,14 @@ Versionnage : `git` + versions sémantiques, un tag par étape (`v0.1.0`…). Pa
 | `assets/esc.js` | `window.esc()` — échappe tout texte d'enregistrement avant `innerHTML`. |
 | `assets/dates-locales.js` | `window.LeaDates` — `lire`, `iso`, `aujourdhui`, `plusMois` : dates « AAAA-MM-JJ » à l'heure locale. |
 | `assets/montants.js` | `window.LeaMontants` — `lire` (saisie → centimes), `euros` (centimes → « 12,50 € »), `tva`. |
+| `index.html` | Vitrine publique, avant connexion (v0.1.0) : nom, accroche, adresse et horaires lus dans les paramètres ; exemple fictif d'ordre de réparation ; parcours en 6 étapes ; grille des 17 modules (même ordre que la roadmap — **mettre à jour le statut de la carte à chaque module livré**) ; comptes de démonstration ; avertissement « prototype » ; réinitialisation avec confirmation dans la page. Bouton « Accéder à la démonstration » grisé tant que `login.html` n'existe pas. |
+| `assets/lea.css` | Feuille de style commune : jetons de couleur clair/sombre, polices, plaque d'immatriculation, boutons, pastilles, règle `[hidden]`. Chaque page la charge et n'ajoute que son style propre. |
+| `assets/parametres.js` | `window.LeaParametres` — `lire()` (valeurs par défaut du garage fictif fusionnées avec `leagarage_parametres`), `ecrire(modifs)`. |
+| `assets/reinitialiser.js` | `window.LeaReinitialiser()` — efface uniquement les clés `leagarage_` du localStorage et du sessionStorage. |
 | `outils/serve.js` | Serveur statique local, port 8766. |
-| `outils/tests/test-assets.js` | 15 contrôles des trois composants ci-dessus. |
+| `outils/tests/test-assets.js` | 22 contrôles des composants partagés (échappement, dates, montants, paramètres, réinitialisation). |
 
-_Aucune page pour l'instant. À chaque nouvelle page : une ligne ici, une carte sur la vitrine, des points dans la checklist._
+_À chaque nouvelle page : une ligne ici, une carte (ou un statut) sur la vitrine, des points dans la checklist._
 
 ## 7. Modèle de rôles — PROPOSITION, à valider (Q1 du cahier)
 
@@ -99,6 +104,7 @@ Identité « atelier » : graphite chaud, **bleu de travail** en accent, **ambre
 - Un `.catch(() => {})` sur un chargement de données de démonstration a caché un fichier manquant pendant des semaines. Journaliser les échecs (`console.warn`).
 - Export Excel d'un registre vide sans ligne d'en-têtes = modèle d'import inutilisable. Chaque export déclare ses colonnes.
 - CSS `display:flex` sur un élément basculé par `hidden` l'empêche de se masquer : ajouter `[hidden]{display:none}`.
+- **Même origine que VIGIE HSE en ligne** : `layinolias.github.io/Vigie-hse` et `layinolias.github.io/LeaGarage` partagent le même `localStorage`. Toutes les clés sont préfixées `leagarage_`, et **`localStorage.clear()` est interdit** (il effacerait VIGIE) : passer par `LeaReinitialiser()`.
 - Tester la **persistance après rechargement**, pas seulement l'état immédiat.
 - `confirm()`/`alert()` ne s'affichent pas dans une page Artifact : les confirmations y sont intégrées à la page.
 - Les harnais de test laissés dans le scratchpad de session sont perdus : ils vivent dans `outils/tests/`.

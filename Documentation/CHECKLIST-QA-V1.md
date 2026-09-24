@@ -26,13 +26,16 @@ Ces points existent aussi sur une page où l'on coche vraiment (enregistré, y c
 - [ ] Dans cette checklist en ligne : cocher un point, écrire une note, recharger — coche et note sont conservées ; ouvrir la page sur un autre appareil — elles y sont aussi.
 - [ ] Ouvrir une nouvelle session Claude dans le dossier `E:\LeaGarage` : elle commence par relire les fichiers de suivi (rappel de début de session).
 
-## 2. Page d'accueil (v0.1.0 — à venir)
+## 2. Page d'accueil (v0.1.0)
 
-- [ ] L'URL racine affiche la vitrine sans passer par la connexion, avec le nom du garage lu dans les paramètres (pas écrit en dur).
-- [ ] L'avertissement « prototype » est visible (données fictives, stockées dans ce navigateur seulement).
-- [ ] Le bouton « Accéder à la démonstration » mène à l'écran de connexion.
-- [ ] Le bouton « Réinitialiser les données de démonstration » demande confirmation, puis remet tout à zéro.
+- [ ] L'URL racine affiche la vitrine sans passer par la connexion, avec le nom du garage lu dans les paramètres (pas écrit en dur) — en titre, dans le pied de page et dans l'onglet du navigateur.
+- [ ] L'avertissement « prototype » est visible (aucun serveur, données fictives, connexion simplifiée, documents sans valeur légale).
+- [ ] Le bouton « Accéder à la démonstration » mène à l'écran de connexion. (Tant que la connexion n'existe pas : le bouton est grisé et ne mène nulle part, la phrase dessous l'explique.)
+- [ ] « Réinitialiser les données » demande confirmation **dans la page** (« Oui, tout effacer » / « Annuler ») ; « Annuler » ne change rien ; « Oui » affiche un message de confirmation.
 - [ ] Basculer le thème du système (clair/sombre) et recharger : les couleurs suivent.
+- [ ] La grille présente les 17 modules en trois familles, chacun avec son icône et son statut (« À venir », « À confirmer », « En cours »).
+- [ ] Le parcours d'un véhicule montre 6 étapes numérotées, en ligne sur grand écran et en colonne sur téléphone.
+- [ ] Sur le site en ligne, ouvrir VIGIE HSE dans le même navigateur, puis réinitialiser LeaGarage : les données de VIGIE sont toujours là (les deux sites partagent le même stockage).
 
 ## 3. Connexion et paramètres (v0.1.0 — à venir)
 

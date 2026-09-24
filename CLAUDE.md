@@ -8,7 +8,7 @@ Application de gestion d'un garage automobile indépendant (prototype) : clients
 
 ## Version active
 
-`v0.0.0` — outillage de pilotage en place, **aucune page HTML encore**. Versionnage sémantique et `git` dès le départ (pas de dossiers dupliqués par version) : un tag `vX.Y.Z` en fin d'étape.
+`v0.1.0` en cours — vitrine `index.html` faite (2026-09-24) ; restent `login.html`, le cockpit et l'écran Paramètres. Versionnage sémantique et `git` dès le départ (pas de dossiers dupliqués par version) : un tag `vX.Y.Z` en fin d'étape.
 
 ## Règles non négociables
 
@@ -44,4 +44,4 @@ Le poste de pilotage affiche des chiffres relevés dans le dépôt (modules fait
 
 ## Fichiers
 
-Pilotage : `CLAUDE.md`, `.claude/settings.json` (rappel de lecture au début de session), `.claude/launch.json`, `Documentation/*.md`, `outils/serve.js`. Composants partagés : `assets/esc.js`, `assets/dates-locales.js`, `assets/montants.js`. Données de démonstration : `DATATEST/` (vide pour l'instant). Pages : aucune — la première sera `index.html` (vitrine) ou `login.html`, voir `PLAN-VERSIONS-V1.md` étape v0.1.0.
+Pilotage : `CLAUDE.md`, `.claude/settings.json` (rappel de lecture au début de session), `.claude/launch.json`, `Documentation/*.md`, `outils/serve.js`. Composants partagés : `assets/lea.css` (style commun), `assets/esc.js`, `assets/dates-locales.js`, `assets/montants.js`, `assets/parametres.js`, `assets/reinitialiser.js` (**jamais `localStorage.clear()`** : VIGIE partage la même origine en ligne). Données de démonstration : `DATATEST/` (vide). Pages : `index.html` (vitrine). Suivantes : `login.html`, `dashboard.html`, `parametres.html` — voir `PLAN-VERSIONS-V1.md` v0.1.0.
